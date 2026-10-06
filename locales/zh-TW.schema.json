@@ -171,6 +171,8 @@
     "disclosures": "資訊揭露"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "對齊",
     "autoplay": "自動播放",
     "background": "背景",
@@ -361,6 +363,7 @@
     "media_type": "多媒體檔案類型",
     "media_width": "多媒體檔案寬度",
     "menu": "選單",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "行動版欄",
     "mobile_height": "行動版高度",
     "mobile_quick_add": "行動版快速加入",
@@ -1091,6 +1094,7 @@
     "disclosures": "資訊揭露"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "carousel_layout_on_mobile": "在行動裝置上一律使用輪播",
     "video_alt_text": "為使用輔助技術的使用者描述影片",
     "video_autoplay": "影片預設為靜音播放",

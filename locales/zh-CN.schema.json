@@ -171,6 +171,8 @@
     "disclosures": "披露信息"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "对齐方式",
     "autoplay": "自动播放",
     "background": "背景",
@@ -369,6 +371,7 @@
     "media_type": "媒体文件类型",
     "media_width": "媒体文件宽度",
     "menu": "菜单",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "移动设备列数",
     "mobile_height": "移动设备高度",
     "mobile_quick_add": "移动设备快速添加",
@@ -1091,6 +1094,7 @@
     "disclosures": "披露信息"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "为使用辅助技术的用户描述视频",
     "video_autoplay": "视频将默认静音",
     "video_external": "使用 YouTube 或 Vimeo URL",

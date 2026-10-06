@@ -46,6 +46,273 @@
     }
   }
 
+  /* TrendMarkaz: product title size.
+
+     The title is a text block on the h3 preset. --font-size--h3 is a flat 2rem
+     at every width - of the heading presets only h1 ships a clamp - so nothing
+     scaled it down, and at 32px a full product title ran to three or four lines
+     and pushed the price and buy button down the page.
+
+     Capped here rather than by lowering the global h3 size setting, which would
+     shrink every h3 on the storefront. Scoped to .product-details so it reaches
+     the title only, and because that class is this block's own.
+
+     .product-details is carried in the selector to clear base.css's
+     `.text-block.h3 :is(h1, h2, h3, h4, h5, h6)` rule, which is (0,2,1); this
+     is (0,3,1). */
+  .product-details .text-block.h3 > h1 {
+    font-size: 1.2rem;
+  }
+
+  /* TrendMarkaz: typography inside the product description.
+
+     The description is a rich-text block, so merchant-authored headings land as
+     bare h1-h6 and pick up the global tokens - an <h2> renders at 2.5rem, which
+     made a description subheading larger than the product title above it and
+     inverted the page's heading order.
+
+     Everything in the panel is sized against the accordion label that opens it.
+     That label is the h5 preset at a flat 1rem - no clamp, so 16px at every
+     width - and the description's own h1 was landing at 17px, leaving the panel
+     contents outranking the summary that contains them. On a phone the two sit
+     a few pixels apart on screen and the inversion was plain.
+
+     Headings take 0.9375rem and body copy 0.875rem, so the panel reads one and
+     two steps below its label. The headings keep the bold heading face, which
+     is what still marks them as headings now that the size no longer does.
+
+     No breakpoint: the summary is 16px on desktop too, so the relationship this
+     is correcting is the same at every width.
+
+     Scoped to .accordion, not to .product-details alone. blocks/price.liquid
+     adds the `rte` class for the paragraph preset as well as the rte one, so
+     the product price block is a `.text-block.rte` too - without .accordion
+     these rules reached into the price row and shrank it to 14px, and the
+     centring below pulled it off the start edge on phones and tablets. */
+  .product-details .accordion .text-block.rte {
+    font-size: 0.875rem;
+  }
+
+  .product-details .accordion .text-block.rte :is(h1, h2, h3, h4, h5, h6) {
+    font-size: 0.9375rem;
+  }
+
+  /* TrendMarkaz: centred accordion content on phones and tablets.
+
+     snippets/text.liquid writes the block's alignment setting into an inline
+     --text-align on the rte-formatter, then applies it to the children with
+     `.text-block > * { text-align: var(--text-align, var(--text-align-default)) }`.
+     An inline custom property outranks anything a stylesheet can declare for it
+     on the same element, so setting --text-align here would be a no-op, and a
+     text-align inherited from a centred ancestor would be overwritten on each
+     child by that rule anyway. Setting text-align on the children directly is
+     what actually lands; the selector beats text.liquid's (0,1,0) on its own.
+
+     Lists are the exception: the block is centred, the items inside it are not.
+     Centring each line individually put every bullet at a different x, so the
+     markers stepped in and out down the list and there was no left edge to read
+     down. The list now shrinks to its content, auto margins centre that box in
+     the panel, and inside it the items stay start-aligned with their markers
+     outside - so every point begins at the same place. A list too wide to fit
+     simply fills the panel and reads as a normal left-aligned list.
+
+     margin-inline matters as much as text-align here. `.text-block > *` is
+     capped at --max-width (455px for the body-normal preset) inside a flex
+     column that stretches, and a stretched item that hits a max size lands at
+     the start of the line. On a phone the panel is about that wide so nothing
+     shows, but on a tablet the box sits against the left edge of a 778px panel
+     and centring the text inside it just centres it on the wrong box - which is
+     why the copy looked off next to the full-width rules, those being <hr>s,
+     which the UA already centres with auto margins. `margin-inline: auto` is the
+     theme's own idiom for this; text-block-styles.liquid centres its children
+     the same way.
+
+     989px rather than 749px: 990px is this theme's desktop threshold, so this
+     covers every width where the page is not in its desktop form. Above it the
+     merchant's alignment setting is left alone. */
+  @media screen and (max-width: 989px) {
+    .product-details .accordion .text-block.rte > * {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .product-details .accordion .text-block.rte :is(ul, ol) {
+      width: fit-content;
+      max-width: 100%;
+      padding-inline-start: 1.5em;
+      text-align: start;
+      list-style-position: outside;
+    }
+  }
+
+  /* TrendMarkaz: description disclosure motion.
+
+     Horizon already animates <details> open and close - block-size via
+     interpolate-size, opacity, and @starting-style, all in
+     snippets/accordion-custom-component.liquid. Two things are changed here for
+     the product description specifically, and nothing is reimplemented.
+
+     Timing. The shared --animation-speed-slow is 0.2s, which on a short menu
+     reads fine but on a full product description is over before the eye follows
+     it. 0.38s on an ease-out curve lets the panel unfurl and settle instead of
+     snapping. The caret is retimed to match, so the chevron and the panel move
+     as one gesture rather than the icon finishing first.
+
+     Reach. The shared stylesheet drops the transition entirely while the
+     details is :not(:focus-within), so that programmatic opens - mobile filter
+     panels - do not animate. Safari does not focus a <summary> on click, so
+     there the description would open with no motion at all. These selectors
+     carry .product-details and .accordion, putting them above that rule at
+     (0,3,2) against (0,2,2), which restores the transition on pointer input.
+     Nothing here opens a panel programmatically, so the case that rule guards
+     against cannot arise on this block.
+
+     The content also rises a few pixels as it fades in, which gives the panel a
+     direction and keeps some motion even where the block-size interpolation is
+     unsupported. Both are dropped under prefers-reduced-motion. */
+  .product-details .accordion {
+    --tm-disclosure-speed: 0.38s;
+    --tm-disclosure-easing: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .product-details .accordion accordion-custom details::details-content,
+  .product-details .accordion accordion-custom details .details-content {
+    transition: content-visibility var(--tm-disclosure-speed) allow-discrete,
+      padding-block var(--tm-disclosure-speed) var(--tm-disclosure-easing),
+      opacity var(--tm-disclosure-speed) var(--tm-disclosure-easing),
+      block-size var(--tm-disclosure-speed) var(--tm-disclosure-easing);
+  }
+
+  .product-details .accordion summary .svg-wrapper {
+    transition: transform var(--tm-disclosure-speed) var(--tm-disclosure-easing);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .product-details .accordion accordion-custom details .details-content > * {
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity var(--tm-disclosure-speed) var(--tm-disclosure-easing),
+        transform var(--tm-disclosure-speed) var(--tm-disclosure-easing);
+    }
+
+    .product-details .accordion accordion-custom details[open] .details-content > * {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-details .accordion accordion-custom details::details-content,
+    .product-details .accordion accordion-custom details .details-content,
+    .product-details .accordion summary .svg-wrapper {
+      transition: none;
+    }
+  }
+
+  /* TrendMarkaz: description disclosure label.
+
+     The accordion exposes only a type preset, and each preset ties family,
+     size and weight together: h5 is the subheading font at 500, which left the
+     label reading lighter than the copy it opens. Moving the whole block to a
+     heavier preset would have taken the size with it - h4 is 20px, close enough
+     to the capped 22px product title above to compete with it.
+
+     So only the face is taken from the heading tokens, and the size is left on
+     whichever preset the merchant has chosen. --font-heading--weight is 700 and
+     the heading font is loaded at that weight, so this is a real bold face
+     rather than one the browser synthesises from the 500 subheading file.
+
+     Carries .product-details to sit above `.accordion .details__header` at
+     (0,3,0) against (0,2,0). The touch target, dividers and caret are the
+     theme's own and are left alone. */
+  .product-details .accordion .details__header {
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+  }
+
+  /* TrendMarkaz: the rating row under the product title.
+
+     The row holds two text blocks - the stars and the review count - at
+     different sizes. Two things pulled them out of line on phones.
+
+     base.css gives `.layout-panel-flex--row:not(.mobile-column) > .text-block`
+     a flex of `1 1 var(--max-width--display-tight)` below 750px, so both blocks
+     grew to share the row and the count drifted away from the stars instead of
+     sitting beside them. They hug their content again here.
+
+     They were also centred rather than sharing a baseline, which with a 16px
+     star and 14px label left the two sitting several pixels apart vertically.
+     Baseline is what makes mixed sizes read as one line.
+
+     The :has() keeps both rules on rows that directly contain text, which in
+     this column is only the rating - the delivery note and the trust panel put
+     an icon or a group in that position, and neither should be baseline
+     aligned. */
+  .product-details .group-block-content.layout-panel-flex--row:has(> .text-block) {
+    align-items: baseline;
+  }
+
+  .product-details .group-block-content.layout-panel-flex--row > .text-block {
+    flex: 0 0 auto;
+  }
+
+  /* TrendMarkaz: unavailable variant options.
+
+     Horizon marks a sold-out option by stroking a diagonal SVG line across the
+     whole control. On a small square swatch that reads as a cancel mark; on a
+     full-width pill like this product's saving goals it reads as a stray
+     scratch across the button, which is what made the picker look unfinished.
+
+     Replaced with a treatment that says the same thing more quietly: the face
+     drops to a faint tint of the foreground, the label itself takes the strike,
+     and the cursor reports that the control cannot be used. The theme draws the
+     border of an unavailable option through ::before/::after rather than the
+     border property - border-width is zeroed for these - so those are softened
+     too, otherwise a full-strength selected-variant border would outline a
+     control that is not selectable.
+
+     Swatches keep the diagonal, which is the right mark at that size.
+
+     Colours come from --color-foreground-rgb with the theme's opacity tokens,
+     so this follows the active colour scheme rather than pinning greys. */
+  .product-details .variant-option__button-label:has([data-option-available='false']):not(
+      .variant-option__button-label--has-swatch
+    ) {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-50));
+    cursor: not-allowed;
+  }
+
+  .product-details
+    .variant-option__button-label:has([data-option-available='false']):not(.variant-option__button-label--has-swatch)
+    .variant-option__button-label__text {
+    text-decoration-line: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  .product-details
+    .variant-option__button-label:has([data-option-available='false']):not(.variant-option__button-label--has-swatch)
+    .variant-option__strikethrough {
+    display: none;
+  }
+
+  .product-details
+    .variant-option__button-label:has([data-option-available='false']):not(.variant-option__button-label--has-swatch)::before,
+  .product-details
+    .variant-option__button-label:has([data-option-available='false']):not(.variant-option__button-label--has-swatch)::after {
+    border-color: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  /* Hovering an option that cannot be chosen should not light up like one that
+     can; the theme's generic hover is neutralised for these. */
+  .product-details .variant-option__button-label:has([data-option-available='false']):not(
+      .variant-option__button-label--has-swatch
+    ):hover {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-8));
+    border-color: transparent;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-50));
+  }
+
   .view-product-title {
     display: none;
   }

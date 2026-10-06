@@ -171,6 +171,8 @@
     "disclosures": "Oplysninger"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Justering",
     "autoplay": "Automatisk afspilning",
     "background": "Baggrund",
@@ -354,6 +356,7 @@
     "media_type": "Medietype",
     "media_width": "Mediebredde",
     "menu": "Menu",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Kolonner på mobil",
     "mobile_height": "Højde på mobil",
     "mobile_logo_image": "Logo til mobil",
@@ -1091,6 +1094,7 @@
     "disclosures": "Oplysninger"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "carousel_layout_on_mobile": "Karrusellen bruges altid på mobil",
     "video_alt_text": "Beskriv videoen for brugere af hjælpeteknologi",
     "video_autoplay": "Videoer vil som standard være uden lyd",

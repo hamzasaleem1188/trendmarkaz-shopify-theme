@@ -33,6 +33,12 @@
     case item
       when 'actions'
         assign item_column = 'right'
+      when 'drawer_search'
+        # TrendMarkaz: there is no `drawer_search_position` setting, so the lookup
+        # above falls back to 'left' and the mobile search icon always lands on
+        # the far left. Follow the section's own Search position setting instead,
+        # so it groups with the account and cart icons on the right.
+        assign item_column = settings.search_position | default: 'right'
     endcase
 
     if item_row == row

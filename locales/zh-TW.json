@@ -159,6 +159,8 @@
     "price_regular": "定價",
     "price_compare_at": "比較售價",
     "price_sale": "促銷價",
+    "price_discount_badge": "{{ percent }}% 優惠",
+    "price_discount_saved": "節省 {{ percent }}%",
     "duties_and_taxes_included": "已包含關稅和稅額。",
     "duties_included": "已包含關稅。",
     "shipping_policy_html": "結帳時計算<a href=\"{{ link }}\">運費</a>。",
@@ -233,6 +235,7 @@
       "one": "尚餘 {{ count }}",
       "other": "尚餘 {{ count }}"
     },
+    "all_rights_reserved": "版權所有。",
     "powered_by": "本商店技術支援來自",
     "store_owner_link_html": "您是商店擁有人嗎？<a href=\"{{ link }}\">請在此登入</a>",
     "shipping_discount_error": "新增地址後，結帳時將顯示運費折扣",

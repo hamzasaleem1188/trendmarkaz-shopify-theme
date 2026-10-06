@@ -159,6 +159,8 @@
     "price_regular": "Vanlig pris",
     "price_compare_at": "Sammenligningspris",
     "price_sale": "Rabattert pris",
+    "price_discount_badge": "-{{ percent }}% rabatt",
+    "price_discount_saved": "Spar {{ percent }}%",
     "duties_and_taxes_included": "Toll og andre avgifter inkludert.",
     "duties_included": "Tollavgifter inkludert.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Frakt</a> beregnes i kassen.",
@@ -239,6 +241,7 @@
       "one": "{{ count }} igjen",
       "other": "{{ count }} igjen"
     },
+    "all_rights_reserved": "Alle rettigheter forbeholdes.",
     "powered_by": "Denne butikken skal bli drevet av",
     "store_owner_link_html": "Er du butikkeieren? <a href=\"{{ link }}\">Logg inn her</a>",
     "recipient_form_send_to": "Send til",

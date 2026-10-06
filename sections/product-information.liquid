@@ -185,6 +185,20 @@
 
 {% stylesheet %}
   .sticky-add-to-cart__bar {
+    /* These three properties are referenced by the rules below but are defined
+       nowhere in this theme - no :root, no snippet, no asset declares them. A
+       declaration whose var() does not resolve and has no fallback is invalid at
+       computed-value time, so every size and weight in this bar was being thrown
+       away and the title, variant and price all rendered at inherited 16px. That
+       is what let the price column grow until it crowded the title out.
+
+       Defined on the bar rather than globally: they are Horizon leftovers and
+       nothing outside this component asks for them, so giving them scope here
+       repairs the existing rules without inventing theme-wide tokens. */
+    --font-paragraph-medium--size: var(--font-paragraph--size);
+    --font-paragraph-small--size: 0.8125rem;
+    --font-weight-semibold: 600;
+
     position: fixed;
     bottom: max(20px, var(--safe-area-inset-bottom));
     left: 50%; /* stylelint-disable-line csstools/use-logical -- centring pair with a physical translateX(-50%) */
@@ -330,6 +344,44 @@
 
     .sticky-add-to-cart__button {
       width: var(--height-buy-buttons);
+    }
+
+    /* The bar is one line beside a 52px thumbnail and a 52px button, so the
+       price cluster has to stay short or it eats the column the title and
+       variant share. Three things keep it in its lane:
+
+       The compare-at price goes. The theme already dropped it below 390px; the
+       discount badge carries the same fact in less room, and with both present
+       the cluster measured 240px of a 500px bar, leaving the title 90px and
+       pushing the variant onto three wrapped lines that ran out of the bar.
+
+       The price stops shrinking, since its own `white-space: nowrap` means
+       shrinking only makes it overflow rather than reflow.
+
+       The variant truncates like the title above it. The theme only did this for
+       single-option products; any product whose variant name is longer than the
+       remaining space has the same problem. */
+    .sticky-add-to-cart__bar .compare-at-price {
+      display: none;
+    }
+
+    .sticky-add-to-cart__price {
+      flex-shrink: 0;
+    }
+
+    .sticky-add-to-cart__variant {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* The badge sits beside 13px type here rather than the product page's 16px,
+       so it takes the tighter of the two padding steps and loses the uppercase
+       tracking that made it wide. */
+    .sticky-add-to-cart__bar .price-discount-badge {
+      padding-block: 1px;
+      padding-inline: 6px;
+      font-size: 0.6875rem;
     }
 
     sticky-add-to-cart:not([data-variant-available='true']) .add-to-cart-text__content {

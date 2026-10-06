@@ -1337,8 +1337,48 @@ summary:hover {
   }
 }
 
+/* Policy pages (/policies/*) are rendered by Shopify straight into
+   content_for_layout, so no section owns them: there is no page-width wrapper
+   and no type scale. Two consequences this corrects.
+
+   The container was a direct child of <main> with no inline padding at all, so
+   on a phone the text ran edge to edge with nothing between it and the screen.
+   --page-margin is not usable here because it is defined only on the
+   .page-width-* classes, which this markup does not carry; the value is written
+   out instead, safe-area insets included. Above phone width the measure cap and
+   auto margins supply the whitespace, so no breakpoints are needed.
+
+   The headings fell through to the global tokens and landed at 44px for the
+   title and 40px for a body <h2> - on a 500px screen that is a heading taller
+   than two lines of the 16px text under it, and the <h2> was within 4px of the
+   page title, so the document had no hierarchy. These clamp from a readable
+   phone size up to a desktop one. */
 .shopify-policy__container {
   padding-block: var(--padding-xl);
+  padding-inline: max(16px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
+  max-width: calc(var(--max-width--body-normal) + 32px);
+  margin-inline: auto;
+}
+
+.shopify-policy__title h1 {
+  font-size: clamp(1.75rem, 1.25rem + 2vw, 2.25rem);
+  line-height: var(--line-height--heading-normal);
+}
+
+.shopify-policy__body :is(h2, h3, h4, h5, h6) {
+  line-height: var(--line-height--heading-normal);
+}
+
+.shopify-policy__body h2 {
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.625rem);
+}
+
+.shopify-policy__body h3 {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+}
+
+.shopify-policy__body :is(h4, h5, h6) {
+  font-size: 1rem;
 }
 
 /* Radio buttons and checkboxes - shared base styles */

@@ -6,9 +6,31 @@
   @param {number} width - The width setting from block.settings.width
   @param {string} class_name - CSS class name for the rendered element
   @param {object} [attributes] - Additional HTML attributes to add to the element
+
+  TrendMarkaz `tm_*` icons are asset-backed and render as a masked element; all
+  other icons render inline from `snippets/icon.liquid`.
 {%- enddoc -%}
 
-{%- if icon != 'none' and image_upload == blank -%}
+{%- liquid
+  # TrendMarkaz brand icons ship as files in `assets/` because they are traced
+  # artwork, far too large to inline the way `snippets/icon.liquid` does. They
+  # are drawn as a CSS mask so `currentColor` still colours them, which keeps
+  # the block's colour setting working exactly as it does for inline icons.
+  assign tm_asset_icons = 'tm_selected,tm_quality,tm_secure,tm_support,tm_shipping' | split: ','
+-%}
+
+{%- if image_upload == blank and tm_asset_icons contains icon -%}
+  {%- render 'tm-asset-icon-styles' -%}
+  {%- assign tm_asset_file = icon | replace_first: 'tm_', 'tm-icon-' | append: '.svg' -%}
+  <span
+    class="{{ class_name | append: ' tm-asset-icon' | strip }}"
+    style="--tm-asset-icon-image: url({{ tm_asset_file | asset_url }}); --tm-asset-icon-size: {{ width }}px;"
+    aria-hidden="true"
+    {% if attributes %}
+      {{ attributes }}
+    {% endif %}
+  ></span>
+{%- elsif icon != 'none' and image_upload == blank -%}
   <svg
     class="{{ class_name | append: ' icon-default' | strip }}"
     aria-hidden="true"

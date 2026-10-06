@@ -171,6 +171,8 @@
     "disclosures": "Pflichtangaben"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "autoplay": "Autoplay",
     "background": "Hintergrund",
     "border_radius": "Eckenradius",
@@ -355,6 +357,7 @@
     "media_type": "Medientyp",
     "media_width": "Medienbreite",
     "menu": "Menü",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Mobile Spalten",
     "mobile_height": "Mobile Höhe",
     "mobile_quick_add": "Quick Add für Mobilgeräte",
@@ -1091,6 +1094,7 @@
     "disclosures": "Pflichtangaben"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Beschreibe das Video für Benutzer von Hilfstechnologien",
     "video_autoplay": "Videos werden standardmäßig stummgeschaltet",
     "video_external": "Verwende eine YouTube- oder Vimeo-URL",

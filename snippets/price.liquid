@@ -21,6 +21,16 @@
     assign show_compare_price = true
   endif
 
+  # Discount percentage for the price-row badge. Computed here because the money
+  # filters further down reassign `price` and `compare_at_price` to formatted
+  # strings, which cannot be subtracted.
+  #
+  # Floored rather than rounded: 51.6% off must never be advertised as 52%.
+  assign discount_percent = 0
+  if show_compare_price and settings.price_discount_badge_enabled
+    assign discount_percent = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | floor
+  endif
+
   if product_resource == blank
     assign price = 1999
   endif
@@ -74,6 +84,30 @@
   endif
 -%}
 
+{%- comment -%}
+  Captured so both orderings of the sale branch emit the same badge. Colours come
+  from `.color-custom-badge-sale`, the same class the card sale badge uses, so the
+  two stay in step with the Badges settings; the inline custom properties carry
+  the merchant's badge shape and type across to it.
+
+  A sub-1% discount renders nothing: "-0% off" reads as a bug, not a saving.
+{%- endcomment -%}
+{%- capture discount_badge -%}
+  {%- if discount_percent > 0 -%}
+    <span
+      class="price-discount-badge color-custom-badge-sale"
+      style="
+        --badge-border-radius: {{ settings.badge_corner_radius }}px;
+        --badge-font-family: var(--font-{{ settings.badge_font_family }}--family);
+        --badge-text-transform: {{ settings.badge_text_transform }};
+      "
+    >
+      <span class="visually-hidden">{{ 'content.price_discount_saved' | t: percent: discount_percent }}</span>
+      <span aria-hidden="true">{{ 'content.price_discount_badge' | t: percent: discount_percent }}</span>
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
+
 <div ref="priceContainer">
   {% if has_volume_pricing %}
     {% comment %} Volume pricing display {% endcomment %}
@@ -99,6 +133,7 @@
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
           <bdi>{{- compare_at_price -}}</bdi>
         </span>
+        {{ discount_badge }}
       {% else %}
         <span class="price-item__group price-item--regular compare-at-price">
           <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
@@ -108,6 +143,7 @@
           <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
           <bdi>{{ price | default: '&nbsp;' }}</bdi>
         </span>
+        {{ discount_badge }}
       {% endif %}
     {% else %}
       <span class="price"

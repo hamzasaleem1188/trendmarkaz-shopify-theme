@@ -161,6 +161,8 @@
     "price_regular": "Preço normal",
     "price_compare_at": "Comparação de preços",
     "price_sale": "Preço promocional",
+    "price_discount_badge": "-{{ percent }}% de desconto",
+    "price_discount_saved": "Economize {{ percent }}%",
     "duties_and_taxes_included": "Tributos de importação e outros tributos incluídos.",
     "duties_included": "Tributos de importação incluídos.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Frete</a> calculado no checkout.",
@@ -241,6 +243,7 @@
       "other": "Tempo restante: {{ count }}",
       "many": "Tempo restante: {{ count }}"
     },
+    "all_rights_reserved": "Todos os direitos reservados.",
     "powered_by": "Esta loja terá a tecnologia da",
     "store_owner_link_html": "Você é titular da loja? <a href=\"{{ link }}\">Faça login aqui</a>",
     "shipping_discount_error": "Os descontos no frete são exibidos no checkout após a adição de um endereço.",

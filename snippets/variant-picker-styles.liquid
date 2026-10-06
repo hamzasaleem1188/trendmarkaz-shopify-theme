@@ -150,15 +150,24 @@
     margin-block-end: var(--margin-xs);
   }
 
+  /* Option names - "Size", "Umrah Saving Goal" - carry a semibold weight so they
+     read as the label for the controls beneath them rather than as body copy.
+     Covers all three markups the picker emits: the fieldset legend for buttons
+     and swatches, the dropdown's label, and the div used for a single value. */
   .variant-option--buttons legend,
   .variant-option--dropdowns > label,
   .variant-option[data-testid='variant-option-single'] {
     color: var(--variant-option-label-color, var(--color-foreground));
+    font-weight: 600;
   }
 
+  /* The chosen value sits inside the legend, so it would inherit that weight.
+     Held at body weight on purpose: the name and its current value only read as
+     a label and its answer while the two differ. */
   .variant-option__swatch-value {
     padding-inline-start: var(--padding-xs);
     color: var(--variant-option-label-color-subdued, var(--color-foreground-subdued));
+    font-weight: var(--font-body--weight);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -191,7 +200,7 @@
 
     .variant-option__select-wrapper,
     .variant-option__button-label {
-      transition-property: background-color, border-color, color;
+      transition-property: background-color, border-color, color, transform, box-shadow;
     }
   }
 
@@ -325,8 +334,13 @@
     }
   }
 
+  /* The chosen value is a wash of the selected colour, not a solid block of it.
+     Filled edge to edge it read as a call to action sitting next to the real
+     one, and shoppers do not expect to press a thing that is already chosen.
+     At 8% it still travels and still marks the selection, but it reads as a
+     highlighted option. The ring on the selected label does the identifying. */
   .variant-option__button-label__pill {
-    background: var(--color-selected-variant-background);
+    background: rgb(var(--color-selected-variant-background-rgb) / var(--opacity-8));
     position: absolute;
     top: calc(var(--options-border-width) * -1);
     bottom: calc(var(--options-border-width) * -1);
@@ -348,19 +362,39 @@
     z-index: 2;
   }
 
+  /* Equal-width buttons share each row instead of filling an auto-fit grid.
+     A grid sizes every track to the widest value, so whenever the count does not
+     divide evenly into the available columns the final row keeps an empty cell -
+     with three long values ("Rs. 2,10,000 Goal") that reads as a button that
+     failed to render. Flex items with a common basis stay equal within a row and
+     grow to close the row out, so the last row fills rather than gapping, and a
+     value too long for two-up simply takes the row to itself.
+     .variant-option--buttons already supplies display:flex, wrapping and the gap;
+     only the sizing belongs here. */
   .variant-option--equal-width-buttons {
     --variant-min-width: clamp(44px, calc(var(--variant-option-padding-inline) * 2 + var(--variant-ch)), 100%);
 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--variant-min-width), 1fr));
-
     .variant-option__button-label {
+      flex: 1 1 var(--variant-min-width);
       min-width: var(--variant-min-width);
     }
 
     .variant-option__button-label__text {
       text-align: center;
       text-wrap: balance;
+    }
+  }
+
+  /* A one-pixel lift on hover, transform only so nothing around it reflows.
+     Scoped to buttons that can actually be chosen - lifting a sold out value
+     would promise an interaction that does not exist - and inside the
+     reduced-motion guard with the picker's other transitions. */
+  @media (prefers-reduced-motion: no-preference) {
+    .variant-option__button-label:not(
+        .variant-option__button-label--has-swatch,
+        :has([data-option-available='false'])
+      ):hover {
+      transform: translateY(-1px);
     }
   }
 
@@ -381,24 +415,66 @@
     min-height: auto;
   }
 
+  /* Selection now reads as a ring rather than a fill. Doubling the border width
+     locally is what draws it: --options-border-width already feeds the label
+     border, the ::before that paints over it, and the pill's vertical bleed, so
+     raising it here thickens all three together instead of layering a shadow
+     that would sit at a different offset from the border it is meant to match.
+     max() keeps a merchant who already chose a thicker border from losing it.
+
+     Text returns to the ordinary variant colour because the surface underneath
+     is now a light wash; --color-selected-variant-text was picked to contrast a
+     solid fill and would be unreadable on it. */
   .variant-option__button-label:has(:checked) {
     --variant-picker-stroke-color: var(--color-selected-variant-border);
+    --options-border-width: max(2px, var(--variant-picker-button-border-width));
 
-    color: var(--color-selected-variant-text);
+    color: var(--color-variant-text);
     border-color: var(--color-selected-variant-border);
   }
 
   .variant-option__button-label:has(:checked):hover {
     border-color: var(--color-selected-variant-hover-border);
-    color: var(--color-selected-variant-hover-text);
+    color: var(--color-variant-hover-text);
 
     .variant-option__button-label__pill {
-      background-color: var(--color-selected-variant-hover-background);
+      background-color: rgb(var(--color-selected-variant-background-rgb) / var(--opacity-15));
     }
   }
 
   .variant-option__button-label:has([data-option-available='false']) {
     color: rgb(var(--color-variant-text-rgb) / var(--opacity-60));
+  }
+
+  /* Unavailable values keep the plain surface and give up contrast instead.
+     A fill here competed with the wash that now marks the selected value - two
+     greys a few percent apart, with only the ring to tell them apart - so the
+     tint belongs to selection alone. The softened border and the struck text
+     carry "sold out" on their own, and the strike is still a non-colour cue.
+     Swatches are excluded: they have no surface of their own to soften. */
+  .variant-option__button-label:has([data-option-available='false']):not(
+      .variant-option__button-label--has-swatch
+    ) {
+    --variant-picker-stroke-color: rgb(var(--color-variant-text-rgb) / var(--opacity-10));
+
+    border-color: rgb(var(--color-variant-text-rgb) / var(--opacity-10));
+
+    /* The value itself is struck through instead of the diagonal rule the theme
+       draws corner to corner. That diagonal is sized for a swatch or a one or
+       two character pill; stretched across a button reading "Rs. 2,10,000 Goal"
+       it slices through the digits and looks like a rendering fault. A rule
+       through the text says the same thing at any button width, and the strike
+       is still a non-colour cue, so the meaning survives for colour blind
+       viewers exactly as the diagonal did. Swatches keep the diagonal - they
+       have no text to strike. */
+    .variant-option__strikethrough {
+      display: none;
+    }
+
+    .variant-option__button-label__text {
+      text-decoration-line: line-through;
+      text-decoration-thickness: 1px;
+    }
   }
 
   .variant-option__button-label--has-swatch:hover {
@@ -446,15 +522,15 @@
   }
 
   .variant-option__button-label:has([data-option-available='false']):has(:checked) {
-    --variant-strikethrough-color: rgb(var(--color-selected-variant-text-rgb) / var(--opacity-subdued-text));
+    --variant-strikethrough-color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
 
-    background-color: var(--color-selected-variant-background);
-    color: rgb(var(--color-selected-variant-text-rgb) / var(--opacity-subdued-text));
+    background-color: rgb(var(--color-selected-variant-background-rgb) / var(--opacity-8));
+    color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
   }
 
   .variant-option__button-label:has([data-option-available='false']):has(:checked):hover {
-    background-color: var(--color-selected-variant-hover-background);
-    color: var(--color-selected-variant-hover-text);
+    background-color: rgb(var(--color-selected-variant-background-rgb) / var(--opacity-15));
+    color: rgb(var(--color-variant-text-rgb) / var(--opacity-subdued-text));
   }
 
   .variant-option__button-label input {

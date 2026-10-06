@@ -1841,6 +1841,17 @@
         "id": "currency_code_enabled_cart_total",
         "label": "t:settings.cart_total",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:settings.discount_badge"
+      },
+      {
+        "type": "checkbox",
+        "id": "price_discount_badge_enabled",
+        "label": "t:settings.price_discount_badge_enabled",
+        "info": "t:info.price_discount_badge_enabled",
+        "default": true
       }
     ]
   },

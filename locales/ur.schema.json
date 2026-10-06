@@ -215,6 +215,7 @@
     "work_quickly_to_ship": "<p>ہم جلد از جلد آپ کا آرڈر شپ کرنے کے لیے تیزی سے کام کریں گے۔ آپ کا آرڈر شپ ہونے کے بعد، آپ کو مزید معلومات کے ساتھ ایک ای میل موصول ہوگی۔ آپ کے مقام کے لحاظ سے ترسیل کے اوقات مختلف ہو سکتے ہیں۔</p>"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "actions_display_style": "موبائل پر ہمیشہ آئیکن استعمال ہوتے ہیں",
     "applies_on_image_only": "صرف تصاویر پر لاگو ہوتا ہے",
     "aspect_ratio_adjusted": "کچھ لے آؤٹ میں ایڈجسٹ کیا گیا",
@@ -688,6 +689,8 @@
     "below_media": "میڈیا کے نیچے"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "accordion": "ایکارڈین",
     "account": "اکاؤنٹ",
     "actions_display_style": "مینو کا اسٹائل",
@@ -887,6 +890,7 @@
     "media_type": "میڈیا کی قسم",
     "media_width": "میڈیا کی چوڑائی",
     "menu": "مینو",
+    "menu_parent_item": "Parent item",
     "minimum_height": "کم از کم اونچائی",
     "mobile_card_size": "موبائل کے کارڈ کا سائز",
     "mobile_columns": "موبائل کے کالم",

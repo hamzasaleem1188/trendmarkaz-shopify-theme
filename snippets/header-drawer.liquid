@@ -1046,6 +1046,41 @@
     border-block-end: 1px solid var(--color-border);
   }
 
+  /* TrendMarkaz: drawer menu rows.
+
+     The rules between items resolve --color-border, which contrast-override
+     points at the palette's darkest value inside this block - so they drew at
+     #071827, a near-black line as heavy as the labels themselves. They are
+     softened to a tint of the foreground, which keeps them visible as structure
+     without competing with the words.
+
+     The rows get centred alignment and a little breathing room, and resolve to
+     full foreground on hover and keyboard focus. Only items with children show
+     an arrow, and those render a summary carrying the theme's own caret, so
+     nothing is added for them here. */
+  .menu-drawer .menu-drawer__list-item--divider,
+  .menu-drawer .menu-drawer__menu-container--divider {
+    border-block-end-color: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  .menu-drawer .menu-drawer__menu > li > a {
+    align-items: center;
+    gap: var(--padding-sm);
+    padding-block: var(--padding-xs);
+    transition: color var(--animation-speed) var(--animation-easing);
+  }
+
+  .menu-drawer .menu-drawer__menu > li > a:hover,
+  .menu-drawer .menu-drawer__menu > li > a:focus-visible {
+    color: var(--color-foreground);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-drawer .menu-drawer__menu > li > a {
+      transition: none;
+    }
+  }
+
   .menu-drawer__menu > .menu-drawer__list-item {
     display: flex;
     min-height: calc(2 * var(--padding-lg) + var(--icon-size-xs));
@@ -1231,6 +1266,67 @@
     height: fit-content;
     color: inherit;
     padding: var(--padding-lg);
+  }
+
+  /* TrendMarkaz: the drawer's own close control.
+
+     It shipped as a small glyph in the top-inline-start corner, directly above
+     the first menu link and sharing its left edge, which read as another list
+     item rather than a way out. Three changes:
+
+     - `align-self` moves it to the opposite corner. The drawer is a flex
+       column, so this needs no absolute positioning and the navigation below
+       still starts where it did.
+     - The hit area is squared up to --minimum-touch-target, the theme's own
+       44px, and given a soft disc so there is something to aim at. The glyph
+       itself steps up from --icon-size-xs to --icon-size-sm.
+     - The inline margin matches --drawer-padding, the inset the menu links use,
+       so the control sits on the same gutter as the list rather than floating.
+
+     The child combinator keeps this to the drawer's own button. Submenu panels
+     reuse the class inside a grid that sets justify-self, and align-self there
+     would move those controls on the wrong axis.
+
+     The class is repeated in the selector to clear the rule further down that
+     squares these buttons off - it doubles its own class for specificity, and a
+     plain child selector only ties with it and then loses on source order. That
+     rule exists because the control used to sit flush against the drawer edge,
+     which is no longer true now that it has a margin and a disc of its own.
+
+     `flex: 0 0 auto` stops the column compressing the box back to the height of
+     the glyph, and width/height are set physically so they land in the same
+     cascade slot as the fit-content pair they replace. */
+  .menu-drawer > .menu-drawer__close-button.menu-drawer__close-button {
+    align-self: flex-end;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--minimum-touch-target);
+    height: var(--minimum-touch-target);
+    margin-block-start: var(--drawer-padding);
+    margin-inline-end: var(--drawer-padding);
+    padding: 0;
+    border-radius: 50%;
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+    color: var(--color-foreground);
+    transition: background-color var(--animation-speed) var(--animation-easing);
+  }
+
+  .menu-drawer > .menu-drawer__close-button:hover,
+  .menu-drawer > .menu-drawer__close-button:focus-visible {
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+  }
+
+  .menu-drawer > .menu-drawer__close-button svg {
+    width: var(--icon-size-sm);
+    height: var(--icon-size-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-drawer > .menu-drawer__close-button {
+      transition: none;
+    }
   }
 
   /* Match the specificity of the base [dir='rtl'] .close-button safe-area rule so

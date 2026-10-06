@@ -171,6 +171,8 @@
     "disclosures": "Ilmoitukset"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Tasaus",
     "autoplay": "Automaattinen toisto",
     "background": "Tausta",
@@ -360,6 +362,7 @@
     "media_type": "Mediatyyppi",
     "media_width": "Median leveys",
     "menu": "Valikko",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Sarakkeet mobiililaitteessa",
     "mobile_height": "Mobiililaitteen näkymän korkeus",
     "mobile_logo_image": "Mobiililogo",
@@ -1091,6 +1094,7 @@
     "disclosures": "Ilmoitukset"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "carousel_layout_on_mobile": "Mobiilissa käytetään aina karusellia.",
     "video_alt_text": "Kuvaile video avustavan teknologian käyttäjille",
     "video_autoplay": "Videot mykistetään oletusarvoisesti",

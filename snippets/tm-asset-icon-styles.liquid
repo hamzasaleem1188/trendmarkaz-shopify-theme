@@ -1,0 +1,39 @@
+{%- doc -%}
+  Shared styles for the TrendMarkaz brand icons that ship as files in `assets/`
+  rather than as inline paths in `snippets/icon.liquid`.
+
+  These icons come from traced artwork and are far too large to inline with
+  `inline_asset_content` (the gem alone is ~213KB), so they are referenced by
+  `asset_url` and drawn as a CSS mask. Masking keeps the icon a single flat
+  shape painted in `currentColor`, so the block's colour setting still drives
+  it exactly like the inline `currentColor` icons do.
+
+  @example
+  {% render 'tm-asset-icon-styles' %}
+{%- enddoc -%}
+
+{% stylesheet %}
+  /* TrendMarkaz asset-backed icons */
+  .tm-asset-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask-image: var(--tm-asset-icon-image);
+    mask-image: var(--tm-asset-icon-image);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  /* The class is repeated to outrank `.icon-block__media { height: auto }`,
+     which otherwise competes with block-size at equal specificity and would be
+     settled by stylesheet order. The artwork is square, so one token drives
+     both axes and every icon renders at an identical box. */
+  .tm-asset-icon.tm-asset-icon {
+    inline-size: var(--tm-asset-icon-size);
+    block-size: var(--tm-asset-icon-size);
+  }
+{% endstylesheet %}

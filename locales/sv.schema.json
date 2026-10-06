@@ -171,6 +171,8 @@
     "disclosures": "Upplysningar"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Justering",
     "autoplay": "Autouppspelning",
     "background": "Bakgrund",
@@ -364,6 +366,7 @@
     "media_type": "Medietyp",
     "media_width": "Mediebredd",
     "menu": "Meny",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Kolumner för mobil",
     "mobile_height": "Höjd för mobil",
     "mobile_quick_add": "Snabbtillägg för mobil",
@@ -1091,6 +1094,7 @@
     "disclosures": "Upplysningar"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Beskriv videon för användare av hjälpmedelsteknik",
     "video_autoplay": "Videor kommer att vara tystade som standard",
     "video_external": "Använd en URL från YouTube eller Vimeo",

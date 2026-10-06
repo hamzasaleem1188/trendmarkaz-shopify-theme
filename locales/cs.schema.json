@@ -171,6 +171,8 @@
     "disclosures": "Prohlášení"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Zarovnání",
     "autoplay": "Automatické přehrávání",
     "background": "Pozadí",
@@ -354,6 +356,7 @@
     "media_type": "Typ médií",
     "media_width": "Šířka médií",
     "menu": "Nabídka",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Sloupce na mobilu",
     "mobile_height": "Výška na mobilu",
     "mobile_logo_image": "Logo na mobilu",
@@ -1091,6 +1094,7 @@
     "disclosures": "Prohlášení"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Popište video pro uživatele asistivních technologií",
     "video_autoplay": "Videa budou ve výchozím nastavení ztlumená",
     "video_external": "Použijte URL z YouTube nebo Vimeo",

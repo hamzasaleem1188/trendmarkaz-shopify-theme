@@ -109,6 +109,22 @@
     color: var(--color-outofstock);
   }
 
+  /* TrendMarkaz: the status text carries the signal too.
+
+     Only the dot was ever given a stock colour - the label beside it inherits
+     the block's own colour setting, so a sold-out product announced itself with
+     a coloured dot and otherwise neutral text. Matching the text to the dot
+     makes the state readable at a glance, and for anyone who cannot separate
+     the dot's colour from the in-stock green it is the difference between the
+     state being legible and not.
+
+     Keyed off the icon's status class because the text element carries no
+     status of its own. A declaration here beats the colour the text inherits
+     from the block wrapper. */
+  .product-inventory__status:has(.product-inventory__icon-out_of_stock) {
+    color: var(--color-outofstock);
+  }
+
   .product-inventory__icon circle:first-of-type {
     opacity: 0.3;
   }

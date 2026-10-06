@@ -249,6 +249,7 @@
     "video_autoplay": "Videos will be muted by default",
     "video_external": "Use a YouTube or Vimeo URL",
     "pills_usage": "Used for applied filters, discount codes, and search suggestions",
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "media_type_info": "Features are populated from your menu links"
   },
   "names": {
@@ -844,6 +845,7 @@
     "desktop_height": "Desktop height",
     "desktop_pagination": "Desktop pagination",
     "direction": "Direction",
+    "discount_badge": "Discount badge",
     // Button appearance for email signup form
     "display": "Display",
     "divider": "Divider",
@@ -962,6 +964,7 @@
     "media_type": "Media type",
     "media_width": "Media width",
     "menu": "Menu",
+    "menu_parent_item": "Parent item",
     "minimum_height": "Minimum height",
     "mobile_card_size": "Mobile card size",
     "mobile_columns": "Mobile columns",
@@ -1005,6 +1008,7 @@
     "desktop_position": "Desktop position",
     "post_count": "Post count",
     "preset": "Preset",
+    "price_discount_badge_enabled": "Show discount percentage",
     "product_price_typography": "Product price typography",
     "product_title_typography": "Product title typography",
     "primary_button_background": "Primary button background",

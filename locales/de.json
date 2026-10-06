@@ -159,6 +159,8 @@
     "price_regular": "Normaler Preis",
     "price_compare_at": "Vergleichspreis",
     "price_sale": "Angebotspreis",
+    "price_discount_badge": "-{{ percent }}% Rabatt",
+    "price_discount_saved": "Sparen Sie {{ percent }}%",
     "duties_and_taxes_included": "Inkl. Zollgebühren und Steuern.",
     "duties_included": "Inkl. Zollgebühren.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Versand</a> wird beim Checkout berechnet.",
@@ -237,6 +239,7 @@
       "one": "{{ count }} übrig",
       "other": "{{ count }} übrig"
     },
+    "all_rights_reserved": "Alle Rechte vorbehalten.",
     "powered_by": "Dieser Shop wird unterstützt werden von",
     "store_owner_link_html": "Bist du der Shop-Inhaber? <a href=\"{{ link }}\">Hier einloggen</a>",
     "shipping_discount_error": "Versandrabatte werden beim Checkout angezeigt, nachdem die Adresse hinzugefügt wurde",

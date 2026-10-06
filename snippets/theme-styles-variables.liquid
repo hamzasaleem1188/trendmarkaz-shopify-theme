@@ -378,7 +378,11 @@
     --color-white-rgb: 255 255 255;
     --color-instock: #3ED660;
     --color-lowstock: #EE9441;
-    --color-outofstock: #C8C8C8;
+    /* TrendMarkaz: sold-out reads as a warning, not as disabled chrome. The
+       stock dot shipped at #C8C8C8, a light grey that disappeared against the
+       page and said nothing. Pointed at the theme's own error colour so the
+       signal matches every other "this cannot proceed" state on the site. */
+    --color-outofstock: var(--color-error);
 
     /* Opacity */
     --opacity-5: 0.05;
@@ -685,3 +689,840 @@
   section_id: 'badge-sold-out',
   preset: 'ui'
 %}
+
+{% comment %}
+  TrendMarkaz: wider side gutters on larger screens so page content is not
+  edge-to-edge on laptops and monitors. Mobile (16px) and tablet (40px) gutters
+  are left as Horizon ships them, and the safe-area insets are preserved at
+  every breakpoint. This renders after base.css, so it overrides the default
+  --page-margin at equal specificity.
+{% endcomment %}
+{% style %}
+  @media screen and (min-width: 1000px) {
+    .page-width-wide,
+    .page-width-normal,
+    .page-width-narrow,
+    .page-width-content {
+      --page-margin: max(64px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
+    }
+  }
+
+  @media screen and (min-width: 1400px) {
+    .page-width-wide,
+    .page-width-normal,
+    .page-width-narrow,
+    .page-width-content {
+      --page-margin: max(80px, var(--safe-area-inset-left, 0px), var(--safe-area-inset-right, 0px));
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: slideshow arrows. On desktop Horizon only reveals them on hover
+  or keyboard focus (opacity:0 in snippets/slideshow-arrows.liquid, revealed by
+  the arrowsSlideIn animation on slideshow-container[animate-arrows]:hover in
+  base.css); these rules keep the chevrons permanently visible and inset them
+  further from the slide edge than the theme's own var(--padding-xs). On phones
+  they are hidden altogether in favour of swiping - see the media query below.
+
+  Class is repeated to raise specificity above the theme's rules without
+  !important: the hover rule is (0,3,2) and the margin rule (0,3,1).
+{% endcomment %}
+{% style %}
+  .slideshow-section.slideshow-section.slideshow-section slideshow-arrows .slideshow-control {
+    opacity: 1;
+    animation: none;
+  }
+
+  /* Pushed to the far edges of the carousel. slideshow-container is
+     overflow-x: clip, so 0 is as far out as they can go - a negative margin
+     would just be clipped. This replaces the theme's var(--padding-xs) inset. */
+  .slideshow-section.slideshow-section slideshow-arrows .slideshow-control:first-of-type {
+    margin-inline-start: 0;
+  }
+
+  .slideshow-section.slideshow-section slideshow-arrows .slideshow-control:last-of-type {
+    margin-inline-end: 0;
+  }
+
+  /* Phones advance the carousel by swiping (slideshow-slides is overflow-x
+     scroll with scroll-snap), and the dots show position, so the arrows are
+     redundant there and only crowd the slide. display:none keeps the buttons in
+     the DOM so the component's previous/next refs still resolve. */
+  @media screen and (max-width: 749px) {
+    .slideshow-section.slideshow-section slideshow-arrows {
+      display: none;
+    }
+  }
+
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: hero carousel sizing.
+
+  FULL VIEWPORT HEIGHT AT EVERY WIDTH. The slideshow section offers only
+  auto/small/medium/large slide heights with no full-screen option. min-height
+  (never height) means a slide whose content does not fit still grows rather
+  than clipping - that combination is what previously hid the mobile CTAs.
+
+  CLIPPING FIX (all widths): blocks/_slide.liquid sets
+  .slide__content { height: 100% } and slideshow-slide is overflow:hidden. Once
+  the slide has a definite height that locks the content box to it and anything
+  taller is cut off. height:auto + min-height:100% lets the content fill the
+  slide and push it taller when needed, so nothing is ever hidden.
+
+  svh rather than vh so mobile browsers measure the visible area; the vh line is
+  the fallback. --header-group-height is subtracted so the slide fills the space
+  below the sticky header; it is set on document.body before first paint in
+  layout/theme.liquid and maintained by header.js.
+
+  MOBILE TYPE: base.css sizes each preset from var(--font-<preset>--size), so
+  redefining those variables on .slide__content scales the slide's type down
+  without fighting selector specificity or touching the global settings.
+{% endcomment %}
+{% style %}
+  .slideshow-section.slideshow-section slideshow-slide {
+    min-height: calc(100vh - var(--header-group-height, 0px));
+    min-height: calc(100svh - var(--header-group-height, 0px));
+    max-height: none;
+  }
+
+  /* Content fills the slide but is never capped by it. */
+  .slideshow-section.slideshow-section slideshow-slide > .slide__content {
+    height: auto;
+    min-height: 100%;
+  }
+
+  /* Centre the content in the tall slide. .slide__content is a plain block
+     container, so the theme's `.slide__content > * { margin: auto }` can only
+     centre horizontally - vertical auto margins compute to 0 in block layout,
+     which left everything stacked at the top of a 100svh slide with a large
+     empty gap beneath. Making it a flex column lets those auto margins resolve
+     vertically. margin-inline is zeroed and width forced so the row keeps its
+     full width instead of shrink-wrapping. */
+  .slideshow-section.slideshow-section slideshow-slide > .slide__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .slideshow-section.slideshow-section slideshow-slide > .slide__content > * {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  /* Noto Nastaliq Urdu, self-hosted from assets/ so it is served by the Shopify
+     CDN rather than fonts.gstatic.com (theme check RemoteAsset, and one less
+     third-party connection above the fold). Subset to only the glyphs in
+     "خوش آمدید" via the Google Fonts text= parameter: 23KB instead of the
+     ~200KB full Nastaliq face. The unicode-range is Google's own, so the
+     browser only downloads it when those characters are actually used. */
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url({{ 'noto-nastaliq-urdu-subset.woff2' | asset_url }}) format('woff2');
+    unicode-range: U+20, U+622, U+627, U+62e-62f, U+634, U+645, U+648, U+653, U+6cc;
+  }
+
+  /* Urdu eyebrow. The accent font (Lora) has no Arabic glyphs, so without this
+     the browser picks an arbitrary fallback. Nastaliq faces first, then Naskh,
+     then the Latin accent font; the stack is per-glyph, so whichever is present
+     renders the Urdu. Nastaliq is a tall, steeply sloped script that collides
+     with itself at normal leading, hence the roomier line-height and padding.
+     align-self centres the pill without stretching it - the block keeps
+     width: fit-content, so .text-block--background stays a pill rather than
+     becoming a full-width bar. */
+  .slideshow-section.slideshow-section slideshow-slide .slide__content .text-block--background,
+  .slideshow-section.slideshow-section slideshow-slide .slide__content .text-block--background > * {
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Urdu Typesetting',
+      'Noto Naskh Arabic', 'Geeza Pro', var(--font-accent--family), serif;
+  }
+
+  .slideshow-section.slideshow-section slideshow-slide .slide__content .text-block--background {
+    /* The theme reads these two custom properties (.custom-font-size and
+       .custom-typography in base.css), so overriding the variables beats
+       redeclaring font-size / line-height against inline styles. Nastaliq needs
+       both more size and far more leading than Latin type: the script slopes
+       steeply and its descenders run deep, so at the block's own 1.125rem/2 it
+       renders cramped and clips inside the pill. */
+    --font-size: 1.625rem;
+    --line-height: 2.2;
+    align-self: center;
+    padding-block-start: 6px;
+    padding-block-end: 14px;
+    padding-inline-start: 26px;
+    padding-inline-end: 26px;
+  }
+
+
+  @media screen and (max-width: 749px) {
+    /* The content panel is full-width and ~90% opaque on a phone, so it would
+       cover the slide's background image completely. Pin the panel to the
+       bottom of the full-height slide: the photo shows through the upper part
+       and the text still sits on an opaque panel.
+       justify-content alone is not enough - the theme's
+       `.slide__content > * { margin: auto }` would re-centre it, so the block
+       margins are zeroed here. */
+    .slideshow-section.slideshow-section slideshow-slide > .slide__content {
+      justify-content: flex-end;
+    }
+
+    .slideshow-section.slideshow-section slideshow-slide > .slide__content > * {
+      margin-block: 0;
+    }
+
+    /* The Urdu eyebrow shows on phones too. Nastaliq is scaled back a little so
+       the pill sits comfortably in the narrower panel - the desktop rule above
+       sets 1.625rem, and this media query comes later in the file so it wins at
+       equal specificity. Padding is trimmed to match the smaller glyphs while
+       still clearing Nastaliq's deep descenders. */
+    .slideshow-section.slideshow-section slideshow-slide .slide__content .text-block--background {
+      --font-size: 1.25rem;
+      --line-height: 2.1;
+      padding-block-start: 4px;
+      padding-block-end: 10px;
+      padding-inline-start: 20px;
+      padding-inline-end: 20px;
+    }
+
+    /* Smaller type so the whole slide fits one screen. */
+    .slideshow-section.slideshow-section slideshow-slide .slide__content {
+      --font-h1--size: 1.75rem;
+      --font-h2--size: 1.5rem;
+      --font-paragraph--size: 0.9375rem;
+      --font-h4--size: 1.0625rem;
+      --font-h5--size: 0.9375rem;
+    }
+
+    /* Tighter inner padding. spacing-style only sets custom properties inline,
+       so the real padding declarations can still be overridden here.
+
+       The bottom value clears the pagination dots: sections/slideshow.liquid
+       hardcodes controls_on_media: true, so slideshow-controls is
+       position:absolute / bottom:0 and overlays the slide at
+       min-height: var(--minimum-touch-target) = 44px. 60px leaves the dots their
+       44px plus a 16px gap, so the CTAs are never underneath them. */
+    .slideshow-section.slideshow-section slideshow-slide > .slide__content {
+      padding-inline-start: 20px;
+      padding-inline-end: 20px;
+      padding-block-start: 24px;
+      padding-block-end: 60px;
+    }
+
+    /* Keep the stack compact on small screens. */
+    .slideshow-section.slideshow-section slideshow-slide .slide__content .group-block-content {
+      gap: 14px;
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: header menu hover + icon affordances.
+
+  Menu links are distinguished by colour and weight rather than decoration:
+  muted at rest, near-black and thickened on hover, near-black and semibold for
+  the current page.
+
+  Starting from a muted resting colour is what makes the change readable - navy
+  on hover against the #17202A default would have been almost invisible, since
+  both sit above 16:1 on white and differ barely at all from each other.
+
+  Weight is doing the work colour alone could not. The usable range is narrow:
+  resting links still have to pass AA, so they cannot go lighter than about
+  5:1 (#667085), which caps how far the colour can travel. Gold is no help -
+  brand #C9A24A is 2.4:1 as text, and deepening it far enough to pass turns it
+  muddy brown rather than highlighted, so it stays on backgrounds and accents.
+
+  Selectors carry an extra class to clear Horizon's own hover rules, which run at
+  (0,2,0) for the subdue-the-rest rule and (0,3,0) for the restore-hovered rule.
+{% endcomment %}
+{% style %}
+  /* resting: muted, so the active and hovered states have somewhere to travel */
+  .header .menu-list .menu-list__link {
+    color: #667085;
+    transition: color 0.2s ease;
+  }
+
+  /* hover / keyboard focus: near-black plus a faux-bold. text-shadow thickens
+     the glyphs without changing their metrics - a real font-weight change here
+     would re-measure the text and shunt the whole nav sideways on every hover. */
+  .header .menu-list .menu-list__list-item:hover .menu-list__link,
+  .header .menu-list .menu-list__list-item:focus-within .menu-list__link {
+    color: #0B1F33;
+    text-shadow: 0 0 0.45px currentColor;
+  }
+
+  /* current page: real semibold. Safe here because it is applied once at load
+     rather than during interaction, so there is no visible shift. */
+  .header .menu-list .menu-list__link--active {
+    color: #0B1F33;
+    font-weight: 600;
+    text-shadow: none;
+  }
+
+  /* Search / account / cart: soft champagne disc on hover. The icon itself stays
+     dark so contrast holds; only the backing tint carries the brand colour. */
+  .header .header-actions__action {
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .header .header-actions__action:hover,
+  .header .header-actions__action:focus-visible {
+    background-color: #E5C8783D;
+    color: #0B1F33;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header .menu-list__link,
+    .header .header-actions__action {
+      transition: none;
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: value strip layout and node connectors.
+
+  The four value nodes are generic `group` blocks in templates/index.json, so
+  the medallion and the label are already merchant-editable there - the disc's
+  fill, gold ring, radius and padding are all group settings, and the icon size
+  and colour are icon-block settings. What settings cannot express is the
+  responsive column count and a line drawn between nodes, so that part lives
+  here.
+
+  Scoped by section id because the strip is composed entirely from generic
+  blocks and has no component class of its own. `value_strip` is the template
+  key in templates/index.json and is stable for the same reason the block ids
+  are: saved merchant configuration depends on it.
+
+  Matched on the end of the id rather than the whole of it. Shopify does not
+  render a JSON template's section as `shopify-section-value_strip`; it
+  prefixes the key with the template's own generated id, so the element is
+  `shopify-section-template--27862213722339__value_strip` on this store and a
+  different number on any other. Only the `__value_strip` suffix is ours to
+  rely on. Pairing the attribute selector with .shopify-section also keeps
+  these rules above Horizon's own (0,2,0) and (0,3,0) layout rules for
+  .layout-panel-flex--row and its children. If the section is ever duplicated
+  or re-keyed, these rules need the new key.
+
+  LAYOUT. From 990px the four nodes sit on one line, which is the section's own
+  `row` direction, so nothing here touches it. Below that they wrap to a 2x2
+  grid. Horizon already sets flex-wrap from --flex-wrap-mobile under 750px, but
+  not between 750px and 989px, so wrap is set explicitly to cover both. The
+  basis is half the line minus half a gutter, which is what makes two columns
+  plus one gutter fill the width exactly. Row gap is widened past the column
+  gutter because the nodes are much taller than they are wide, and a square gap
+  reads as cramped between stacked rows.
+
+  CONNECTORS. Each node after the first on its line draws a line back to the
+  node before it. The span is measured centre to centre, which is the one
+  distance CSS can state here without knowing anything about the medallion:
+  100% of a node plus one gutter. Both ends are then pulled back by
+  --tm-value-strip-connector-inset so the line stops short of each circle
+  instead of running under it, leaving clear air between the line and the
+  medallion at both ends.
+
+  That inset is the circle's radius plus the breathing space wanted beyond it,
+  so the 12px is the gap you actually see. Because the line now ends in the
+  open rather than beneath an opaque disc, --tm-value-strip-node-size has to be
+  right: it is the medallion's diameter, the sum of three merchant settings on
+  a descendant element that CSS cannot read from here - icon width + twice the
+  disc padding + twice the border width, currently 28 + 32 + 2. It sets both
+  how high the line sits and where each end stops, so if those settings change
+  this value needs to change with them, or the line will sit off the circle's
+  centre line and crowd or overlap its edge.
+
+  On the 2x2 the connector joins the two nodes of each row - nth-child(even) -
+  and the rows are left unjoined. The third node starts a new line, so the
+  `+ .group-block` form used on one line would draw a connector back across the
+  full width of the strip to the node above it.
+
+  COLOUR. Derived from --color-border-rgb. On a section with its own
+  background, snippets/contrast-override.liquid re-points that token at the
+  palette extreme that contrasts the background, so on the navy band the line
+  inverts to a light hairline on its own. --opacity-30-60 is the theme's
+  brightness-aware pair from snippets/brightness-opacities.liquid: 0.3 over a
+  light background, 0.6 over a dark one, which keeps it readable on navy
+  without pinning a second value here. The literal fallback covers a band with
+  no background colour set, where that token is not emitted. The line is solid
+  rather than faded at its ends, because the medallions already end it.
+{% endcomment %}
+{% style %}
+  .shopify-section[id$='__value_strip'] .section-content-wrapper {
+    --tm-value-strip-node-size: 62px;
+    --tm-value-strip-connector-inset: calc(var(--tm-value-strip-node-size) / 2 + 12px);
+  }
+
+  .shopify-section[id$='__value_strip'] .section-content-wrapper > .group-block::before {
+    position: absolute;
+    inset-inline-start: calc(-50% - var(--gap, 24px) + var(--tm-value-strip-connector-inset));
+    inset-block-start: calc(var(--tm-value-strip-node-size) / 2);
+    transform: translateY(-50%);
+    inline-size: calc(100% + var(--gap, 24px) - 2 * var(--tm-value-strip-connector-inset));
+    block-size: 1px;
+    background-color: rgb(var(--color-border-rgb) / var(--opacity-30-60, 0.3));
+    pointer-events: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    /* One line: every node joins back to the one before it. */
+    .shopify-section[id$='__value_strip'] .section-content-wrapper > .group-block + .group-block::before {
+      content: '';
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .shopify-section[id$='__value_strip'] .section-content-wrapper {
+      flex-wrap: wrap;
+      row-gap: calc(var(--gap, 24px) * 1.5);
+    }
+
+    .shopify-section[id$='__value_strip'] .section-content-wrapper > .group-block {
+      flex: 0 0 calc(50% - var(--gap, 24px) / 2);
+    }
+
+    /* Second node of each row only. */
+    .shopify-section[id$='__value_strip'] .section-content-wrapper > .group-block:nth-child(even)::before {
+      content: '';
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: footer column proportions.
+
+  sections/footer.liquid lays the footer out as a grid of equal columns -
+  `repeat(var(--grid-columns), 1fr)` - so the brand column, which carries a logo
+  and a paragraph of copy, gets exactly the same width as a menu column holding
+  a handful of short links. That is what made the footer read as misaligned: the
+  brand copy wrapped over six short lines while the link columns sat half empty
+  beside it.
+
+  Giving the first column half again the width of the others lets the paragraph
+  breathe and pulls the three link columns into an even rhythm across the rest
+  of the row. Only applied to the four-column case, matched the same way the
+  theme's own tablet rule does, so a footer with a different number of blocks
+  keeps Horizon's equal columns.
+
+  Desktop only. Below 990px the theme already collapses to one or two columns,
+  where equal widths are correct.
+
+  Scoped by the id suffix because the footer is a section group: the rendered id
+  is `shopify-section-sections--<generated>__footer_main`, and only the
+  `__footer_main` part is ours. Pairing it with .shopify-section keeps this
+  above the theme's own (0,1,0) grid rule.
+{% endcomment %}
+{% style %}
+  /* TrendMarkaz: a visible edge where the page ends and the footer begins.
+
+     The footer group now sits on its own warm surface, color_palette.color4,
+     so it reads as one block against the white page above. Before this
+     footer_main carried the page background, which on every template without
+     the newsletter section (about, contact, collections, blog, the policy
+     pages) meant grey links floating on white with no boundary at all. The home
+     and product pages hid the problem, because the dark newsletter band
+     happened to sit directly above the footer and supplied the edge for it.
+
+     The utilities bar stays on the same colour rather than stepping a shade
+     deeper, and keeps its own 1px divider to separate itself. color5 was the
+     obvious step, but it puts the #667085 copyright at 4.40:1, under the 4.5:1
+     AA floor; on color4 the same text sits at 4.72:1.
+
+     The rule is still worth keeping with the new background: it holds the edge
+     if a section above ever lands on a warm tone too, and it is the same border
+     colour the utilities divider already uses, so the footer is bracketed by
+     matching lines top and bottom.
+
+     Scoped by the id suffix because the footer is a section group: the rendered
+     id is `shopify-section-sections--<generated>__footer_main`, and only the
+     `__footer_main` part is ours. */
+  .shopify-section[id$='__footer_main'] .section-background {
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  @media screen and (min-width: 990px) {
+    .shopify-section[id$='__footer_main'] .footer-content[style*='--grid-columns: 4'] {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    }
+  }
+
+  /* Phones: two menu columns rather than one long stack.
+
+     sections/footer.liquid lays the footer out as `grid-template-columns: 1fr`
+     below 750px, so every block becomes a full-width row and the footer runs on
+     for several screens. Two columns halves that.
+
+     The brand block keeps the full width and centres, because it carries a logo
+     and a sentence rather than a list of short links - at half width the
+     sentence would wrap to five or six lines beside a column of one-word links.
+     Centring it also gives the logo somewhere to sit now that it is 48px on
+     mobile. :first-child is the brand because it is first in the section's
+     block order; the three menu columns follow it into the two-column grid. */
+  /* Up to 989px, not 749px. sections/footer.liquid already drops the footer to
+     two columns from 750px, so the four-column desktop layout only exists above
+     989px - which means a tablet or a landscape phone was getting the two-column
+     grid with the brand still squeezed into one half and aligned left. Matching
+     the theme's own breakpoint keeps the brand full width and centred wherever
+     the footer is not in its desktop form. */
+  @media screen and (max-width: 989px) {
+    .shopify-section[id$='__footer_main'] .footer-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .shopify-section[id$='__footer_main'] .footer-content > :first-child {
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    .shopify-section[id$='__footer_main'] .footer-content > :first-child .group-block-content {
+      align-items: center;
+    }
+
+    /* The blurb is a text block at 100% width, so snippets/text.liquid writes
+       its alignment setting into --text-align and applies that to the block's
+       children through `.text-block > *`, which beats a text-align inherited
+       from the centred column.
+
+       That variable is written inline on the block, and an inline custom
+       property beats one from a stylesheet, so re-pointing it alone leaves the
+       paragraph reading `start`. The children are therefore matched as well as
+       the block and given text-align directly, which is what actually moves the
+       text. The merchant's desktop alignment setting is untouched. */
+    .shopify-section[id$='__footer_main'] .footer-content > :first-child .text-block,
+    .shopify-section[id$='__footer_main'] .footer-content > :first-child .text-block > * {
+      --text-align: center;
+      text-align: center;
+    }
+  }
+
+  /* Social icons in their own brand colours.
+
+     blocks/social-links.liquid offers one colour for the whole set, so the
+     per-platform colours have to come from here. Matching on the href rather
+     than the aria-label: the label is the platform name run through
+     `capitalize`, while the domain is what actually identifies the service and
+     cannot drift. Every platform the block supports is listed, so any account
+     added later is already covered. */
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='facebook.'] {
+    color: #1877f2;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='instagram.'] {
+    color: #e4405f;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='youtube.'] {
+    color: #ff0000;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='tiktok.'] {
+    color: #010101;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='linkedin.'] {
+    color: #0a66c2;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='pinterest.'] {
+    color: #bd081c;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='vimeo.'] {
+    color: #1ab7ea;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='bsky.'] {
+    color: #0285ff;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='tumblr.'] {
+    color: #36465d;
+  }
+
+  /* X and Threads are black marks. Snapchat is deliberately absent: its brand
+     yellow is close to invisible on the warm footer background, so it is better
+     left on the inherited text colour than given a mark nobody can see. */
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='twitter.'],
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='x.com'],
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a[href*='threads.'] {
+    color: #000000;
+  }
+
+  /* The utilities row is `1fr auto 1fr` so the policies link sits centred
+     between the copyright and the social icons. With no social accounts
+     configured the icon wrapper still renders - empty, zero width - and holds
+     its column open, which leaves the policies link stranded mid-row with
+     nothing to balance it.
+
+     Collapsing to two tracks puts it at the end of the row instead.
+
+     The test is "the wrapper contains no icon", written as :not(:has(...))
+     rather than :has(... :not(:has(*))): a :has() may not be nested inside
+     another :has(), but one inside :not() is fine. :empty is no good either -
+     the block emits a whitespace text node, so the wrapper is never empty.
+
+     The moment a social account is added the wrapper gains a child, this stops
+     matching, and Horizon's three-track layout returns on its own. */
+  @media screen and (min-width: 750px) {
+    .shopify-section[id$='__footer_utilities'] .utilities:not(:has(> .social-icons__wrapper > *)) {
+      grid-template-columns: 1fr auto;
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: reviews carousel arrows.
+
+  Horizon's slideshow arrows are built to sit on top of hero media, so
+  snippets/slideshow-arrows.liquid starts them at opacity 0 and base.css only
+  brings them in through the arrowsSlideIn animation while the container is
+  hovered or focused within. On a review carousel that is the wrong default:
+  nothing indicates the row scrolls until the pointer happens to land on it,
+  and on a touch screen there is no hover at all.
+
+  These rules pin them visible. The shape is already right for a light section
+  - `circle` fills from --color-primary-button-background, which is brand navy
+  with a white chevron - so only visibility and the end states need handling.
+
+  assets/slideshow.js already sets `disabled` on each button when the carousel
+  is not infinite: previous at index 0, next once the last slide is in view.
+  blocks/_carousel-content.liquid passes infinite: false, so that logic is live
+  and all that was missing was a visual state for it. Dimming rather than
+  hiding keeps the row's width stable and keeps the affordance legible.
+
+  Scoped by the section key so the hero slideshow and any product carousels
+  keep Horizon's hover behaviour.
+{% endcomment %}
+{% style %}
+  .shopify-section[id$='__product_reviews'] slideshow-arrows .slideshow-control {
+    opacity: 1;
+    animation: none;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  /* blocks/_carousel-content.liquid removes a disabled control outright with
+     `display: none`, which leaves a hole where the arrow was and makes the pair
+     jump around as you scroll. Keeping it in the layout and dimming it instead
+     means the control stays where the eye expects it and simply reads as
+     unavailable. `flex` is what the circle shape sets, and is what centres the
+     chevron inside the button. */
+  .shopify-section[id$='__product_reviews'] slideshow-arrows .slideshow-control[disabled] {
+    display: flex;
+    opacity: var(--opacity-30, 0.3);
+    pointer-events: none;
+  }
+
+  /* Exactly `columns` cards, with no part of the next one showing.
+
+     --peek-next-slide-size is 3rem globally and is subtracted from the width
+     each card is given, which is what leaves a sliver of the fourth card at the
+     edge. Zeroing it here lets three cards plus two gaps fill the content width
+     exactly. The variable is read by the card width calc in
+     blocks/_carousel-content.liquid, so setting it on the carousel is enough -
+     it inherits down. */
+  .shopify-section[id$='__product_reviews'] .carousel-content {
+    --peek-next-slide-size: 0px;
+  }
+
+  /* Arrow placement differs by breakpoint.
+
+     Horizon absolutely positions slideshow-arrows across the whole slideshow
+     (`inset: 0`, `position="center"`) so they sit at the left and right edges,
+     vertically centred. That is right when they float over edge-to-edge hero
+     media, and it is still what we want on a phone, where one card fills the
+     row and a small control at each edge reads as the obvious way to move.
+
+     On desktop it is wrong: three cards fill the row, so an arrow at each edge
+     lands on top of the first and last card. There they are pinned to the
+     top-right instead - bottom at 100% of the track, so they sit in the
+     header's lower padding, inset by the page margin so the trailing arrow
+     lines up with the card edge rather than the viewport edge. The header's
+     blocks are left-aligned in the template so that corner is free. The next
+     control's `margin-inline-start: auto`, which spreads the pair across a
+     full-width bar, is cleared so they group together. */
+  @media screen and (min-width: 750px) {
+    .shopify-section[id$='__product_reviews'] .carousel-content slideshow-arrows {
+      inset: auto var(--util-page-margin-offset) 100% auto;
+      padding-inline: 0;
+      padding-block-end: 14px;
+      gap: 8px;
+    }
+
+    .shopify-section[id$='__product_reviews'] .carousel-content .slideshow-control--next {
+      margin-inline-start: 0;
+    }
+  }
+
+  /* Phones keep Horizon's edge placement, just smaller. The controls are
+     normally sized to --minimum-touch-target, 44px; these are brought down to
+     36 so they sit lightly on a single card instead of dominating it. The
+     theme's horizontal padding is dropped too, otherwise the circle grows wider
+     than it is tall and the aspect-ratio on the shape fights it. */
+  @media screen and (max-width: 749px) {
+    .shopify-section[id$='__product_reviews'] .carousel-content .slideshow-control {
+      min-inline-size: 36px;
+      min-block-size: 36px;
+      inline-size: 36px;
+      block-size: 36px;
+      padding: 0;
+    }
+
+    /* Hold the card clear of the controls instead of letting them sit on it.
+
+       snippets/slideshow-styles.liquid implements the gutters as padding-inline
+       on the track, and a slide is sized at 100% of that track's content box,
+       so widening the gutter narrows and insets the card in one move - no
+       margins to double up between slides, and scroll-padding-inline-start
+       keeps the snap position right.
+
+       The extra 44px is the 36px control plus an 8px gap, which leaves the card
+       sitting exactly between the two arrows. --gutter-slide-width arrives as an
+       inline custom property on an ancestor, so it is re-declared here on the
+       track itself, where a directly set value beats an inherited one. */
+    .shopify-section[id$='__product_reviews'] .carousel-content slideshow-slides {
+      --gutter-slide-width: calc(var(--util-page-margin-offset) + 44px);
+    }
+  }
+
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: footer link affordances.
+
+  base.css only gives links a hover treatment when they sit inside a heading or
+  a paragraph - `:is(h1..h6, p) > a:hover` and the `.rte` rule below it. Footer
+  menu links are list items, and the utilities row is buttons and bare anchors,
+  so none of them reacted to the pointer at all: no colour change, no underline,
+  nothing to confirm the target before clicking.
+
+  The hover darkens to the same navy as the column labels and draws an
+  underline, so a link resolves towards the heading above it.
+
+  --color-foreground would have been the obvious target, but it does not work
+  here: each menu column sets its own text colour, and contrast-override
+  redefines --color-foreground inside that block to the very colour the links
+  already are - so the hover resolved to the resting colour and nothing moved.
+
+  text-decoration-line is set explicitly rather than relying on the anchor's
+  default underline being revealed by a colour change, which did not take
+  effect on these list links.
+
+  :focus-visible is matched alongside :hover so keyboard users get the same
+  signal, which the theme's own rules also omit here.
+
+  The links are named individually rather than excluding the social icons with
+  `a:not(.social-icons__wrapper a)`. One invalid selector invalidates an entire
+  comma-separated rule, and that form silently dropped the whole set - the
+  policy links and the copyright link stopped reacting too. Listing the three
+  real targets avoids relying on it, and keeps the social icons out of the
+  colour change without a negation at all.
+
+  Social icons are excluded from the colour change - they carry their platform
+  colours - and lift slightly instead, which is dropped under reduced motion.
+{% endcomment %}
+{% style %}
+  /* One place to change the footer's ink. Brand navy is the palette's color1,
+     but the only CSS variable carrying it is --color-primary-button-background,
+     and binding footer text to a button token would mean restyling the buttons
+     silently restyles the footer. A named variable keeps the intent obvious and
+     the value in a single line. */
+  .shopify-section[id$='__footer_main'],
+  .shopify-section[id$='__footer_utilities'] {
+    --tm-footer-ink: #0b1f33;
+  }
+
+  /* Column labels in navy against the muted links beneath them, so each column
+     reads as a heading with a list rather than one run of grey. The menu block
+     has a single colour setting covering the heading and its links, so the two
+     cannot be separated through settings alone. A declaration on the heading
+     beats the colour the block inherits from its own .color-custom rule. */
+  .shopify-section[id$='__footer_main'] .menu__heading {
+    color: var(--tm-footer-ink);
+  }
+
+  .shopify-section[id$='__footer_main'] .menu__item a,
+  .shopify-section[id$='__footer_utilities'] .utilities a,
+  .shopify-section[id$='__footer_utilities'] .utilities button {
+    transition: color var(--animation-speed) var(--animation-easing),
+      text-decoration-color var(--animation-speed) var(--animation-easing);
+  }
+
+  .shopify-section[id$='__footer_main'] .menu__item a:hover,
+  .shopify-section[id$='__footer_main'] .menu__item a:focus-visible,
+  .shopify-section[id$='__footer_utilities'] a.footer-utilities__text:hover,
+  .shopify-section[id$='__footer_utilities'] a.footer-utilities__text:focus-visible,
+  .shopify-section[id$='__footer_utilities'] .footer-utilities__group-copyright a:hover,
+  .shopify-section[id$='__footer_utilities'] .footer-utilities__group-copyright a:focus-visible,
+  .shopify-section[id$='__footer_utilities'] .policy-list-trigger:hover,
+  .shopify-section[id$='__footer_utilities'] .policy-list-trigger:focus-visible {
+    color: var(--tm-footer-ink);
+    text-decoration-line: underline;
+    text-decoration-color: currentcolor;
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a {
+    display: inline-flex;
+    transition: transform var(--animation-speed) var(--animation-easing),
+      opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a:hover,
+  .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a:focus-visible {
+    transform: translateY(-2px);
+    opacity: var(--opacity-80, 0.8);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shopify-section[id$='__footer_main'] .menu__item a,
+    .shopify-section[id$='__footer_utilities'] .utilities a,
+    .shopify-section[id$='__footer_utilities'] .utilities button {
+      transition: none;
+    }
+
+    .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a:hover,
+    .shopify-section[id$='__footer_utilities'] .social-icons__wrapper a:focus-visible {
+      transform: none;
+    }
+  }
+{% endstyle %}
+
+{% comment %}
+  TrendMarkaz: About page, centred on phones.
+
+  Scoped through the data-template attribute that layout/theme.liquid already
+  writes on <main>, rather than a new class or the section keys. It is exact -
+  only the about template matches - and because it sits on the main element the
+  header and footer are untouched, which a body-level hook would not have been.
+
+  Text blocks at full width have their alignment written into --text-align by
+  snippets/text.liquid, and base.css applies that, so an inherited text-align
+  from a centred ancestor loses. The variable is re-pointed and text-align set
+  alongside it, the same pairing the footer brand column needed.
+
+  The children are matched as well as the block. base.css aligns the heading or
+  paragraph inside a text block directly, not only its wrapper, so centring the
+  wrapper alone left the text itself still starting at the left edge.
+
+  align-items on the flex columns is what moves the icons and the buttons; text
+  alignment alone would leave them hanging at the left edge of a centred block.
+
+  Desktop keeps the left alignment set per block in the template, so this is a
+  phone-only treatment rather than a change to the page's design.
+{% endcomment %}
+{% style %}
+  @media screen and (max-width: 749px) {
+    #MainContent[data-template='page.about'] .text-block,
+    #MainContent[data-template='page.about'] .text-block > * {
+      --text-align: center;
+      text-align: center;
+    }
+
+    #MainContent[data-template='page.about'] .group-block-content,
+    #MainContent[data-template='page.about'] .section-content-wrapper {
+      align-items: center;
+    }
+  }
+{% endstyle %}

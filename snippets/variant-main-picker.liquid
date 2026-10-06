@@ -93,10 +93,17 @@
             ref="fieldsets[]"
             {{ option_id_attribute }}
           >
+            {%- comment -%}
+              The chosen value sits beside the option name for button styles too,
+              not just swatches. Buttons otherwise label the group ("Umrah Saving
+              Goal") without ever naming the current answer, so on a wrapped or
+              scrolled picker the only record of what is selected is the fill on
+              one button. Escaped because the value is merchant text.
+            {%- endcomment -%}
             <legend>
               {{ product_option.name | escape -}}
-              {%- if variant_style == 'swatch' -%}
-                <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
+              {%- if product_option.selected_value != blank -%}
+                <span class="variant-option__swatch-value">{{ product_option.selected_value | escape }}</span>
               {%- endif %}
             </legend>
             {%- for product_option_value in product_option.values -%}

@@ -159,6 +159,8 @@
     "price_regular": "Giá thông thường",
     "price_compare_at": "Giá gốc",
     "price_sale": "Giá ưu đãi",
+    "price_discount_badge": "Giảm {{ percent }}%",
+    "price_discount_saved": "Tiết kiệm {{ percent }}%",
     "duties_and_taxes_included": "Đã bao gồm thuế và thuế nhập khẩu.",
     "duties_included": "Đã bao gồm thuế nhập khẩu.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Phí vận chuyển</a> được tính khi thanh toán.",
@@ -236,6 +238,7 @@
       "one": "Còn {{ count }}",
       "other": "Còn {{ count }}"
     },
+    "all_rights_reserved": "Mọi quyền được bảo lưu.",
     "powered_by": "Cửa hàng này sẽ được cung cấp bởi",
     "store_owner_link_html": "Bạn có phải chủ cửa hàng không? <a href=\"{{ link }}\">Đăng nhập tại đây</a>",
     "shipping_discount_error": "Ưu đãi giảm giá vận chuyển được hiển thị tại trang thanh toán sau khi thêm địa chỉ",

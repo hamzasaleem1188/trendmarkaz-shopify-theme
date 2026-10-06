@@ -19,10 +19,35 @@
     data-testid="footer-utilities"
   >
     {% content_for 'blocks' %}
+    {%- if section.settings.tagline != blank -%}
+      <p class="footer-utilities__tagline">{{ section.settings.tagline | escape }}</p>
+    {%- endif -%}
   </div>
 </div>
 
 {% stylesheet %}
+  /* A single line beneath the whole utilities row - under the copyright, the
+     policy list and the social icons alike.
+
+     It sits inside `.utilities` and spans every column, rather than after the
+     container. Outside it, the distance from the policy list was the row's own
+     bottom padding plus this element's top padding, which is far more air than
+     the line needs. Inside, the grid's row gap sets it, and that gap is already
+     a merchant setting on the section.
+
+     `.utilities > *` aligns its children to the start of their column from
+     750px up, which is right for the three columns above but strands this line
+     on the left. The child selector is needed to outrank it: at equal
+     specificity that rule wins simply by sitting later in this file. */
+  .utilities > .footer-utilities__tagline {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin: 0;
+    text-align: center;
+    text-wrap: pretty;
+    color: var(--color-foreground-muted);
+  }
+
   .utilities {
     width: 100%;
     display: flex;
@@ -107,6 +132,11 @@
     "groups": ["footer"]
   },
   "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "t:settings.text"
+    },
     {
       "type": "select",
       "id": "section_width",

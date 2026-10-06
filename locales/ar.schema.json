@@ -215,6 +215,7 @@
     "work_quickly_to_ship": "<p>سنعمل بسرعة لشحن طلبك في أقرب وقت ممكن. بمجرد شحن طلبك، ستتلقى رسالة بريد إلكتروني تحتوي على مزيد من المعلومات. تختلف أوقات التوصيل حسب موقعك.</p>"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "actions_display_style": "تُستخدم الأيقونات دائماً على الهاتف المحمول",
     "applies_on_image_only": "ينطبق على الصور فقط",
     "aspect_ratio_adjusted": "معدل في بعض التخطيطات",
@@ -688,6 +689,8 @@
     "below_media": "أسفل الوسائط"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "accordion": "أكورديون",
     "account": "حساب",
     "actions_display_style": "نمط القائمة",
@@ -887,6 +890,7 @@
     "media_type": "نوع الوسائط",
     "media_width": "عرض الوسائط",
     "menu": "القائمة",
+    "menu_parent_item": "Parent item",
     "minimum_height": "الحد الأدنى للارتفاع",
     "mobile_card_size": "حجم البطاقة على الهاتف المحمول",
     "mobile_columns": "أعمدة الهاتف المحمول",

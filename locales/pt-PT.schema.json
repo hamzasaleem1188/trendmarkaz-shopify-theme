@@ -171,6 +171,8 @@
     "disclosures": "Divulgações"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Alinhamento",
     "autoplay": "Reprodução automática",
     "background": "Fundo",
@@ -369,6 +371,7 @@
     "media_type": "Tipo de conteúdo multimédia",
     "media_width": "Largura do conteúdo multimédia",
     "menu": "Menu",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Colunas em telemóvel",
     "mobile_height": "Altura em telemóvel",
     "mobile_quick_add": "Adição rápida em telemóvel",
@@ -1091,6 +1094,7 @@
     "disclosures": "Divulgações"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Descreva o vídeo para utilizadores de tecnologia de apoio",
     "video_autoplay": "Os vídeos serão silenciados por predefinição",
     "video_external": "Utilize um URL do YouTube ou do Vimeo",

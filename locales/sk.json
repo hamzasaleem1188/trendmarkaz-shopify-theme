@@ -162,6 +162,8 @@
     "price_regular": "Normálna cena",
     "price_compare_at": "Porovnať podľa ceny",
     "price_sale": "Cena po zľave",
+    "price_discount_badge": "-{{ percent }}% zľava",
+    "price_discount_saved": "Ušetríte {{ percent }}%",
     "checkout": "Platba",
     "duties_and_taxes_included": "Vrátane ciel a daní.",
     "duties_included": "Vrátane ciel.",
@@ -243,6 +245,7 @@
       "few": "Zostáva {{ count }}",
       "many": "Zostáva {{ count }}"
     },
+    "all_rights_reserved": "Všetky práva vyhradené.",
     "powered_by": "Tento obchod bude prevádzkovať",
     "store_owner_link_html": "Ste vlastníkom obchodu? <a href=\"{{ link }}\">Prihláste sa tu</a>",
     "shipping_discount_error": "Zľavy na dopravu sa zobrazia pri platbe po pridaní adresy",

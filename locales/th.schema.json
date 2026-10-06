@@ -171,6 +171,8 @@
     "disclosures": "การเปิดเผยข้อมูล"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "การจัดตำแหน่ง",
     "autoplay": "เล่นอัตโนมัติ",
     "background": "พื้นหลัง",
@@ -352,6 +354,7 @@
     "media_type": "ประเภทสื่อ",
     "media_width": "ความกว้างของสื่อ",
     "menu": "เมนู",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "คอลัมน์บนมือถือ",
     "mobile_height": "ความสูงบนมือถือ",
     "mobile_logo_image": "โลโก้สำหรับมือถือ",
@@ -1091,6 +1094,7 @@
     "disclosures": "การเปิดเผยข้อมูล"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "โปรดอธิบายวิดีโอสำหรับผู้ใช้เทคโนโลยีความช่วยเหลือพิเศษ",
     "video_autoplay": "วิดีโอจะถูกปิดเสียงตามค่าเริ่มต้น",
     "video_external": "ใช้ URL ของ YouTube หรือ Vimeo",

@@ -171,6 +171,8 @@
     "disclosures": "Bildirimler"
   },
   "settings": {
+    "discount_badge": "Discount badge",
+    "price_discount_badge_enabled": "Show discount percentage",
     "autoplay": "Otomatik oynatma",
     "background": "Arka plan",
     "border_radius": "Köşe yarıçapı",
@@ -368,6 +370,7 @@
     "media_type": "Medya türü",
     "media_width": "Medya genişliği",
     "menu": "Menü",
+    "menu_parent_item": "Parent item",
     "mobile_columns": "Mobil sütunlar",
     "mobile_height": "Mobil yüksekliği",
     "mobile_logo_image": "Mobil logosu",
@@ -1091,6 +1094,7 @@
     "disclosures": "Bildirimler"
   },
   "info": {
+    "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Yardımcı teknoloji kullanıcıları için videoyu açıklayın",
     "video_autoplay": "Videolar varsayılan olarak sessize alınır",
     "video_external": "Bir YouTube veya Vimeo URL'si kullanın",

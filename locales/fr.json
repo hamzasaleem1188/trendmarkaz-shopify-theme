@@ -160,6 +160,8 @@
     "price_regular": "Prix régulier",
     "price_compare_at": "Prix avant réduction",
     "price_sale": "Prix promotionnel",
+    "price_discount_badge": "-{{ percent }} % de réduction",
+    "price_discount_saved": "Économisez {{ percent }} %",
     "duties_and_taxes_included": "Frais de douane et taxes inclus.",
     "duties_included": "Frais de douane inclus.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Expédition</a> calculée lors du paiement.",
@@ -241,6 +243,7 @@
       "many": "{{ count }} restant(s)"
     },
     "shipping_policy": "Expédition calculée lors du paiement.",
+    "all_rights_reserved": "Tous droits réservés.",
     "powered_by": "Cette boutique sera exploitée par",
     "store_owner_link_html": "Êtes-vous le propriétaire de la boutique ? <a href=\"{{ link }}\">Connectez-vous ici</a>",
     "shipping_discount_error": "Les réductions sur l’expédition sont affichées lors du paiement après avoir ajouté une adresse",

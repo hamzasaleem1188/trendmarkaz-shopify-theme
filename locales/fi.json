@@ -159,6 +159,8 @@
     "price_regular": "Normaalihinta",
     "price_compare_at": "Vertailuhinta",
     "price_sale": "Alennushinta",
+    "price_discount_badge": "-{{ percent }}% alennus",
+    "price_discount_saved": "Säästä {{ percent }}%",
     "duties_and_taxes_included": "Sisältää tullit ja verot.",
     "duties_included": "Sisältää tullit.",
     "shipping_policy_html": "<a href=\"{{ link }}\">Toimituskulut</a> lasketaan kassalla.",
@@ -236,6 +238,7 @@
       "one": "{{ count }} jäljellä",
       "other": "{{ count }} jäljellä"
     },
+    "all_rights_reserved": "Kaikki oikeudet pidätetään.",
     "powered_by": "Tämän kaupan alustana on",
     "store_owner_link_html": "Oletko kaupan omistaja? <a href=\"{{ link }}\">Kirjaudu sisään tästä</a>",
     "shipping_discount_error": "Toimitusalennukset näytetään kassalla osoitteen lisäämisen jälkeen",

@@ -13,6 +13,17 @@
       "type": "main-page",
       "settings": {}
     },
+    "banner": {
+      "type": "brand-banner",
+      "name": "Brand banner",
+      "settings": {
+        "section_width": "page-width",
+        "image_alt": "TrendMarkaz \u2014 quality products, no compromise. Premium quality, fast and reliable delivery, safe and secure payments, trendy products you'll love.",
+        "background_color": "",
+        "padding-block-start": 24,
+        "padding-block-end": 8
+      }
+    },
     "intro": {
       "type": "section",
       "name": "Intro",
@@ -1297,6 +1308,7 @@
   },
   "order": [
     "main",
+    "banner",
     "intro",
     "why",
     "delivery",

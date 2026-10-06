@@ -9,6 +9,7 @@
  */
 {
   "names": {
+    "brand_banner": "Brand banner",
     "404": "404",
     "colors": "Paleta de cores",
     "custom_section": "Seção personalizada",
@@ -171,6 +172,7 @@
     "disclosures": "Divulgações"
   },
   "settings": {
+    "alt_text": "Alt text",
     "discount_badge": "Discount badge",
     "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "Alinhamento",
@@ -1094,6 +1096,8 @@
     "disclosures": "Divulgações"
   },
   "info": {
+    "brand_banner_alt": "The banner's wording is part of the image, so this is the only version of it a screen reader or a search engine sees.",
+    "brand_banner_image": "Leave empty to use the banner bundled with the theme.",
     "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Descreva o vídeo para usuários de tecnologia assistiva",
     "video_autoplay": "Os vídeos ficarão sem som por padrão",

@@ -215,6 +215,8 @@
     "work_quickly_to_ship": "<p>سنعمل بسرعة لشحن طلبك في أقرب وقت ممكن. بمجرد شحن طلبك، ستتلقى رسالة بريد إلكتروني تحتوي على مزيد من المعلومات. تختلف أوقات التوصيل حسب موقعك.</p>"
   },
   "info": {
+    "brand_banner_alt": "The banner's wording is part of the image, so this is the only version of it a screen reader or a search engine sees.",
+    "brand_banner_image": "Leave empty to use the banner bundled with the theme.",
     "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "actions_display_style": "تُستخدم الأيقونات دائماً على الهاتف المحمول",
     "applies_on_image_only": "ينطبق على الصور فقط",
@@ -245,6 +247,7 @@
     "media_type_info": "تمت تعبئة الميزات من روابط القائمة الخاصة بك"
   },
   "names": {
+    "brand_banner": "Brand banner",
     "column": "عمود",
     "product_title": "عنوان المنتج",
     "custom_liquid": "Liquid مخصص",
@@ -689,6 +692,7 @@
     "below_media": "أسفل الوسائط"
   },
   "settings": {
+    "alt_text": "Alt text",
     "discount_badge": "Discount badge",
     "price_discount_badge_enabled": "Show discount percentage",
     "accordion": "أكورديون",

@@ -1,0 +1,158 @@
+{% comment %}
+  Section contract.
+  A full-width brand masthead: one image, no blocks, no text of its own.
+
+  The image is a merchant setting first and a bundled theme asset second. Picking
+  one in the editor routes it through image_tag, so Shopify's CDN generates the
+  responsive sizes. With nothing picked it falls back to assets/tm-brand-banner*,
+  which cannot be resized on the fly, so two widths ship and the browser chooses
+  between them. That fallback is what makes the section render as soon as it is
+  added, rather than showing an empty picker.
+
+  The banner carries its wordmark, tagline and promises as pixels, so the alt
+  text has to say what they say - it is the only copy a screen reader or a search
+  engine gets from this section. Defaulted, and editable.
+
+  @example
+  <!-- First section of templates/page.about.json, above the intro copy -->
+{% endcomment %}
+
+{% liquid
+  assign banner = section.settings.image
+  assign alt_text = section.settings.image_alt | default: shop.name, allow_false: false
+
+  if section.settings.background_color != blank
+    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
+  endif
+%}
+
+<div
+  class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+></div>
+<div
+  class="section section--{{ section.settings.section_width }}{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+>
+  <div
+    class="brand-banner spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    {%- if banner != blank -%}
+      {{
+        banner
+        | image_url: width: 1800
+        | image_tag:
+          class: 'brand-banner__image',
+          alt: alt_text,
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '600, 900, 1200, 1600, 1800',
+          sizes: '(min-width: 750px) min(100vw, 1200px), 100vw'
+      }}
+    {%- else -%}
+      {%- comment -%}
+        asset_url has no resizing, so the two prepared widths are offered as a
+        srcset and the browser picks. Dimensions are the 1800w file's, which keeps
+        the aspect ratio reserved before the image lands.
+      {%- endcomment -%}
+      <img
+        class="brand-banner__image"
+        src="{{ 'tm-brand-banner.webp' | asset_url }}"
+        srcset="{{ 'tm-brand-banner-small.webp' | asset_url }} 900w, {{ 'tm-brand-banner.webp' | asset_url }} 1800w"
+        sizes="(min-width: 750px) min(100vw, 1200px), 100vw"
+        width="1800"
+        height="601"
+        alt="{{ alt_text | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .brand-banner__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.brand_banner",
+  "class": "section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:settings.image",
+      "info": "t:info.brand_banner_image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "t:settings.alt_text",
+      "info": "t:info.brand_banner_alt",
+      "default": "TrendMarkaz — quality products, no compromise. Premium quality, fast and reliable delivery, safe and secure payments, trendy products you'll love."
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.brand_banner"
+    }
+  ]
+}
+{% endschema %}

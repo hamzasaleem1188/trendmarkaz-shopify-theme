@@ -223,6 +223,8 @@
     "work_quickly_to_ship": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>"
   },
   "info": {
+    "brand_banner_alt": "The banner's wording is part of the image, so this is the only version of it a screen reader or a search engine sees.",
+    "brand_banner_image": "Leave empty to use the banner bundled with the theme.",
     "actions_display_style": "Icons are always used on mobile",
     "applies_on_image_only": "Applies to images only",
     "aspect_ratio_adjusted": "Adjusted in some layouts",
@@ -253,6 +255,7 @@
     "media_type_info": "Features are populated from your menu links"
   },
   "names": {
+    "brand_banner": "Brand banner",
     "column": "Column",
     "product_title": "Product title",
     "custom_liquid": "Custom Liquid",
@@ -751,6 +754,7 @@
     "account": "Account",
     "actions_display_style": "Menu style",
     "alignment": "Alignment",
+    "alt_text": "Alt text",
     "alignment_mobile": "Mobile alignment",
     "align_baseline": "Align text baseline",
     "animation": "Animation",

@@ -9,6 +9,7 @@
  */
 {
   "names": {
+    "brand_banner": "Brand banner",
     "404": "404",
     "custom_section": "Benutzerdefinierter Abschnitt",
     "icon": "Symbol",
@@ -171,6 +172,7 @@
     "disclosures": "Pflichtangaben"
   },
   "settings": {
+    "alt_text": "Alt text",
     "discount_badge": "Discount badge",
     "price_discount_badge_enabled": "Show discount percentage",
     "autoplay": "Autoplay",
@@ -1094,6 +1096,8 @@
     "disclosures": "Pflichtangaben"
   },
   "info": {
+    "brand_banner_alt": "The banner's wording is part of the image, so this is the only version of it a screen reader or a search engine sees.",
+    "brand_banner_image": "Leave empty to use the banner bundled with the theme.",
     "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "Beschreibe das Video für Benutzer von Hilfstechnologien",
     "video_autoplay": "Videos werden standardmäßig stummgeschaltet",

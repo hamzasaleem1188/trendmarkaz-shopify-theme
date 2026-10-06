@@ -9,6 +9,7 @@
  */
 {
   "names": {
+    "brand_banner": "Brand banner",
     "404": "404",
     "colors": "カラーパレット",
     "custom_section": "カスタムセクション",
@@ -171,6 +172,7 @@
     "disclosures": "開示情報"
   },
   "settings": {
+    "alt_text": "Alt text",
     "discount_badge": "Discount badge",
     "price_discount_badge_enabled": "Show discount percentage",
     "alignment": "配置",
@@ -1094,6 +1096,8 @@
     "disclosures": "開示情報"
   },
   "info": {
+    "brand_banner_alt": "The banner's wording is part of the image, so this is the only version of it a screen reader or a search engine sees.",
+    "brand_banner_image": "Leave empty to use the banner bundled with the theme.",
     "price_discount_badge_enabled": "Shows how much a product is discounted next to its price, worked out from the compare-at price. Rounded down, so the saving is never overstated.",
     "video_alt_text": "支援技術のユーザーのために動画の説明を記述します",
     "video_autoplay": "動画はデフォルトでミュートになります",
